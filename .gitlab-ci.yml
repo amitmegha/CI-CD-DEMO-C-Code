@@ -1,0 +1,30 @@
+# Demonstration on CI Pipeline
+build:
+  stage: build
+  image: gcc
+  script: 
+    - cd src; g++ main.cpp -o main
+  artifacts:
+    paths:
+      - src/main
+  tags:
+    - docker
+
+codescan:
+  stage: test
+  image: sdldevelopers/sonar-scanner
+  script:
+    - /bin/sh .devops/stage-codescan.sh  
+  tags:
+    - docker
+
+publish:
+  stage: deploy
+  image: meisterplan/jfrog-cli
+  variables:
+    ARTIFACTORY_BASE_URL: https://artifactory.rosetta.ericssondevops.com/artifactory
+    REPO_NAME: sd-moai-telstra-onboarding
+  script:
+    - bash .devops/stage-publish.sh
+  tags:
+    - docker
