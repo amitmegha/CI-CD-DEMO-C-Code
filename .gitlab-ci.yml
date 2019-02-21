@@ -3,7 +3,7 @@ build:
   stage: build
   image: gcc
   script: 
-    - g++ main.cpp -o main
+    - cd src; g++ main.cpp -o main
   artifacts:
     paths:
       - src/main
